@@ -370,6 +370,10 @@ txt
       argument :required
       cast :integer
     }
+    option("--instance"){
+      argument :required
+      cast :string
+    }
     option("--limit"){
       argument :required
       cast :integer
@@ -388,7 +392,7 @@ txt
       end
 =end
 
-      %w[ forever ppid wait limit ].each do |key|
+      %w[ forever ppid wait limit instance].each do |key|
         options[key.to_sym] = param[key].value if param[key].given?
       end
 
@@ -407,7 +411,11 @@ txt
         info{ "SIGTERM" }
         exit
       }
-
+      
+      if param["instance"].given?
+        Bj.hostname = Bj.hostname + "." + param["instance"].value
+      end
+   
       if param["daemon"].given?
         daemon{ Bj.run options }
       else
