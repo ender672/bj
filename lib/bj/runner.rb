@@ -185,7 +185,7 @@ class Bj
               job = thread = stdout = stderr = nil
 
               Bj.transaction(options) do
-                now = Time.now
+                now = Util.sql_time_now
 
                 job = Bj::Table::Job.find :first,
                                           :conditions => ["state = ? and submitted_at <= ?", "pending", now],
@@ -311,7 +311,7 @@ class Bj
 
       def archive_jobs
         Bj.transaction do
-          now = Time.now
+          now = Util.sql_time_now
           too_old = now - Bj.ttl
           jobs = Bj::Table::Job.find :all,
                                      :conditions => ["(state = 'finished' or state = 'dead') and submitted_at < ?", too_old]

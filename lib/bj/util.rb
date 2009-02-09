@@ -127,6 +127,10 @@ class Bj
         b = e.backtrace.join("\n") rescue ""
         "#{ m }(#{ c })\n#{ b }"
       end
+
+      def sql_time_now
+        Bj.config['use_utc_for_sql_conditions'] ? Time.now.utc : Time.now
+      end
     end
     send :extend, ModuleMethods
   end
